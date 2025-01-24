@@ -1,2 +1,3 @@
 # GGJ25-game
-Some GBA game for now
+
+A GBA game using [butano](https://github.com/GValiente/butano) library which has the following [license](https://github.com/GValiente/butano/blob/master/LICENSE)
