@@ -10,6 +10,8 @@
 #include "bn_camera_ptr.h"
 #include "bn_music_items.h"
 #include "bn_sound_items.h"
+#include "bn_timer.h"
+#include "bn_timers.h"
 
 void sprites_visibility_scene() {
 
@@ -53,10 +55,15 @@ int main() {
   bn::bg_palettes::set_transparent_color(bn::color(16, 16, 16));
 
   // bn::sound_items::bubbletest2.play();
-  // bn::music_items::bubble.play();
+  // bn::music_items::maybe.play();
+
+  bn::timer timer;
+  const float ticks_per_second = (float) bn::timers::ticks_per_second();
 
   while (true) {
-    animation();
+    float deltaT = timer.elapsed_ticks_with_restart() / ticks_per_second;
+
+    // animation();
     bn::core::update();
   }
 }
