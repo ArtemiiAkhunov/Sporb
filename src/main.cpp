@@ -43,6 +43,7 @@ void animation() {
     }
 
     action.update();
+    bn::core::update();
   }
 }
 
@@ -55,7 +56,7 @@ int main() {
   // bn::music_items::bubble.play();
 
   while (true) {
-    // animation();
+    animation();
     bn::core::update();
   }
 }
