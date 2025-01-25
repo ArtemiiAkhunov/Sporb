@@ -62,7 +62,7 @@ int main() {
   bn::core::init();
   bn::bg_palettes::set_transparent_color(bn::color(2, 2, 5));
 
-  // bn::sound_items::bubbletest2.play();
+  bn::music_items::mainmelody.play();
   // bn::music_items::maybe.play();
 
   bn::timer timer;
