@@ -1,11 +1,13 @@
 #include "bn_bg_palettes.h"
 #include "bn_core.h"
 #include "bn_keypad.h"
+#include "bn_regular_bg_ptr.h"
 #include "bn_sprite_actions.h"
 #include "bn_sprite_animate_actions.h"
 #include "bn_sprite_items_astronaut.h"
 #include "bn_sprite_items_ninja.h"
 #include "bn_sprite_ptr.h"
+#include "bn_regular_bg_items_blue_bg.h"
 
 #include "bn_camera_ptr.h"
 #include "bn_music_items.h"
@@ -13,15 +15,21 @@
 #include "bn_timer.h"
 #include "bn_timers.h"
 
-void sprites_visibility_scene() {
+void sprites_bg_move_scene() {
+  bn::regular_bg_ptr blue_bg = bn::regular_bg_items::blue_bg.create_bg(-56, -56);
+  blue_bg.set_priority(0);
+  int speed = 1;
 
-  bn::sprite_ptr red_sprite = bn::sprite_items::astronaut.create_sprite(0, 0);
-
-  while (!bn::keypad::start_pressed()) {
-    if (bn::keypad::a_pressed()) {
-      red_sprite.set_visible(!red_sprite.visible());
+  while(! bn::keypad::start_pressed()) {
+    if (bn::keypad::left_held()) {
+      blue_bg.set_x(blue_bg.x() - speed);
+    } else if (bn::keypad::right_held()) {
+      blue_bg.set_x(blue_bg.x() + speed);
+    } else if (bn::keypad::up_held()) {
+      blue_bg.set_y(blue_bg.y() + speed);
+    } else if (bn::keypad::down_held()) {
+      blue_bg.set_y(blue_bg.y() - speed);
     }
-
     bn::core::update();
   }
 }
@@ -49,7 +57,7 @@ void animation() {
   }
 }
 
-/*int main() {
+int main() {
 
   bn::core::init();
   bn::bg_palettes::set_transparent_color(bn::color(16, 16, 16));
@@ -64,6 +72,8 @@ void animation() {
     float deltaT = timer.elapsed_ticks_with_restart() / ticks_per_second;
 
     // animation();
+
+    sprites_bg_move_scene();
     bn::core::update();
   }
-}*/
+}
