@@ -14,6 +14,7 @@
 #include "bn_sound_items.h"
 #include "bn_timer.h"
 #include "bn_timers.h"
+#include "bntmx_maps_testmap2.h"
 
 void sprites_bg_move_scene() {
   bn::regular_bg_ptr sky = bn::regular_bg_items::sky.create_bg(-56, -56);
@@ -63,6 +64,8 @@ int main() {
   bn::bg_palettes::set_transparent_color(bn::color(2, 2, 5));
 
   bn::music_items::mainmelody.play();
+  bntmx::map* map = new bntmx::maps::testmap2();
+  map->tiles(0).front()
   // bn::music_items::maybe.play();
 
   bn::timer timer;

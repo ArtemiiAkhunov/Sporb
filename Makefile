@@ -32,10 +32,11 @@ TARGET      	:=  $(notdir $(CURDIR))
 BUILD       	:=  build
 LIBBUTANO   	:=  ./butano/
 PYTHON      	:=  python3
-SOURCES     	:=  src
-INCLUDES    	:=  include
+SOURCES     	:=  src $(BUILD)/src
+INCLUDES    	:=  include $(BUILD)/include
 DATA        	:=
-GRAPHICS    	:=  graphics
+GRAPHICS    	:=  graphics $(BUILD)/graphics
+MAPS         	:=  maps
 AUDIO       	:=  audio
 DMGAUDIO    	:=  dmg_audio
 ROMTITLE    	:=  ROM TITLE
@@ -49,7 +50,7 @@ USERLIBS    	:=
 DEFAULTLIBS 	:=  
 STACKTRACE		:=	
 USERBUILD   	:=  
-EXTTOOL     	:=  
+EXTTOOL     	:=  @$(PYTHON) -B bntmx.py --target=butano --build=$(BUILD) $(MAPS)
 
 #---------------------------------------------------------------------------------------------------------------------
 # Export absolute butano path:
