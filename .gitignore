@@ -4,3 +4,5 @@ build/*
 /.clangd
 .DS_Store
 .vscode
+/.clang-format
+/GGJ25-game.sav
