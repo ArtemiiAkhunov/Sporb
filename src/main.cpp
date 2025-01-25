@@ -47,7 +47,7 @@ void animation() {
   }
 }
 
-int main() {
+/*int main() {
 
   bn::core::init();
   bn::bg_palettes::set_transparent_color(bn::color(16, 16, 16));
@@ -59,4 +59,4 @@ int main() {
     animation();
     bn::core::update();
   }
-}
+}*/
