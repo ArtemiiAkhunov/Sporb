@@ -8,6 +8,8 @@
 #include "bn_sprite_animate_actions.h"
 
 #include "bn_camera_ptr.h"
+#include "bn_sound_items.h"
+#include "bn_music_items.h"
 
 void sprites_visibility_scene()
   {
@@ -64,6 +66,9 @@ int main() {
 
   bn::core::init();
   bn::bg_palettes::set_transparent_color(bn::color(16, 16, 16));
+
+// bn::sound_items::bubbletest2.play();
+// bn::music_items::bubble.play();
 
   while(true)
   {
