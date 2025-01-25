@@ -18,7 +18,7 @@
 void sprites_bg_move_scene() {
   bn::regular_bg_ptr sky = bn::regular_bg_items::sky.create_bg(-56, -56);
   sky.set_priority(0);
-  int speed = 1;
+  float speed = 0.05;
 
   while(! bn::keypad::start_pressed()) {
     if (bn::keypad::left_held()) {
@@ -60,7 +60,7 @@ void animation() {
 int main() {
 
   bn::core::init();
-  bn::bg_palettes::set_transparent_color(bn::color(16, 16, 16));
+  bn::bg_palettes::set_transparent_color(bn::color(2, 2, 5));
 
   // bn::sound_items::bubbletest2.play();
   // bn::music_items::maybe.play();
