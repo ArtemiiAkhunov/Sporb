@@ -22,7 +22,7 @@
 2,2,2,2,1,1,2,2,1,1,1,2,2,2,1,1
 </data>
  </layer>
- <objectgroup id="3" name="objects">
+ <objectgroup id="3" name="objects" visible="0">
   <object id="2" gid="6" x="352" y="480" width="32" height="32"/>
   <object id="3" gid="5" x="448" y="480" width="32" height="32"/>
   <object id="4" gid="5" x="448" y="192" width="32" height="32"/>

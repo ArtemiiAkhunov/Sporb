@@ -26,7 +26,6 @@ struct map_object
 {
     bn::fixed_point position;
     uint16_t id;
-    bntmx::map::objects()
 };
 
 typedef uint16_t map_tile;
@@ -136,11 +135,12 @@ public:
 graphics = '''\
 {{
     "type": "regular_bg",
+    "bpp_mode": "bpp_4_auto",
     "height": {bg_height}
 }}
 '''
 
-map_object = 'bntmx::map_object(bn::fixed_point({x}, {y}), {id}, {sprite_id})'
+map_object = 'bntmx::map_object(bn::fixed_point({x}, {y}), {id})'
 
 objects_definition_template = '''\
     // Objects are sorted by layers, then within layers they are sorted by
