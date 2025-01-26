@@ -18,6 +18,7 @@ typedef struct {
 #define ANIM_WALK 1,0,1,2
 #define ANIM_DASH 6,7,8,6
 #define ANIM_GROUNDPOUND 9,10,11,12
-#define ANIM_JUMP 3,4,5,3
+#define ANIM_JUMP 3,4,5,5
+#define ANIM_FALL 5,5,5,5
 #define X_BORDER (255.0f)
 #endif
