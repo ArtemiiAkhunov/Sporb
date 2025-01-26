@@ -1,11 +1,13 @@
+#include "bn_camera_ptr.h"
+#include "bn_fixed_point_fwd.h"
 #include "bn_keypad.h"
 #include "bn_sprite_ptr.h"
 #include "Entity.cpp"
 
 class Player : private Entity {
 public:
-  Player(const bn::sprite_ptr& sprite_ptr, const bn::sprite_item *sprite_item) : Entity(sprite_ptr, sprite_item) {
-
+  Player(bn::sprite_ptr& sprite_ptr, const bn::sprite_item *sprite_item) : Entity(sprite_ptr, sprite_item), camera_(bn::camera_ptr::create(getPos())) {
+    sprite_ptr.set_camera(camera_);
   }
   void tick(float deltaTime) override {
     // TODO: update is touching ground
@@ -58,9 +60,15 @@ public:
       }
     }*/
   }
+  void setPos(bn::fixed_point pos) override {
+    setWorkaroundPos(pos);
+    // camera_.set_position(pos);
+    
+  }
 private:
   bool isDash = true;
   bool touchedGround = false;
   int dashCoolDown = 0;
   int dashTime = 0;
+  bn::camera_ptr camera_;
 };

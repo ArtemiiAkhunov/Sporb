@@ -125,7 +125,7 @@ int main() {
   sky.set_priority(3);
   level.set_priority(2);
   // level.set_blending_enabled(true);
-  float speed = 0.05;
+  float speed = -0.025;
 
   while (true) {
     float deltaT = counter.elapsed_ticks_with_restart() / ticks_per_second;

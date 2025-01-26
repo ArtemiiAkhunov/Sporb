@@ -10,7 +10,7 @@ public:
     const int start_x; // X-coordinate
     const int start_y; // Y-coordinate
     // Constructor
-    Entity(const bn::sprite_ptr& sprite_ptr, const bn::sprite_item *sprite_item)
+    Entity(bn::sprite_ptr& sprite_ptr, const bn::sprite_item *sprite_item)
         : sprite_ptr_(sprite_ptr), start_x(sprite_ptr.x()), start_y(sprite_ptr.y()) ,animation_(bn::create_sprite_animate_action_forever(sprite_ptr, 1, sprite_item->tiles_item(), 0, 0, 0, 0)) {
         }
 
@@ -25,7 +25,7 @@ public:
     bool isGravity() { return false; };
 
     // Mutators
-    void setPos(bn::fixed_point pos) {
+    virtual void setPos(bn::fixed_point pos) {
       sprite_ptr_.set_position(pos);
       pos_ = pos;
     }
@@ -36,8 +36,9 @@ public:
         bn::fixed y = pos_.y().to_float() + (vel_.yvel * deltaT);
         if (gravity_) y += (0.5f * (deltaT * deltaT) * GRAVITY);
         bn::fixed x = pos_.x().to_float() + (vel_.xvel * deltaT);
-        pos_ = {x, y};
+        setPos({x, y});
     };
+    void setWorkaroundPos(bn::fixed_point pos) { pos_ = pos; sprite_ptr_.set_position(pos); };
 
 private:
     bn::sprite_ptr sprite_ptr_;
