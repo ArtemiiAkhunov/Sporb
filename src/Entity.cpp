@@ -54,7 +54,7 @@ public:
     }
 
     void flipAnimmation(bool flip) {
-      sprite_ptr_.set_vertical_flip(flip);
+      sprite_ptr_.set_horizontal_flip(flip);
     }
 
     void animationUpdate() {
