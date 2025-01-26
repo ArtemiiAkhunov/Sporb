@@ -88,6 +88,21 @@ public:
     // determine tiles we start, end in, and pass through
     // check, from start to end, for the first tile that is collidable
     // return a position just outside that tile
+    // bn::fixed_point xTravel = {dst.x(), src.y()};
+    
+    // for (int i = pixel_to_tile(src); i < pixel_to_tile(xTravel); (dst.x() )) {
+    //   if ((*tiles_)[i]) {
+    //     // Solid
+    //     if (dst.x() < src.x()) {
+    //       // Moving left
+    //       bn::fixed right_edge_of_tile = xTravel.x() - (xTravel.x() % TILE_SIZE) + TILE_SIZE - 1 - xT;
+    //       bn::
+    //     } else {
+    //       // Moving right
+    //     }
+    //   }
+    // }
+
     bn::vector<int, 256> tilesWeCross(0);
     float dist = distance(src, dst);
     // BN_LOG("DIST", (int) dist);

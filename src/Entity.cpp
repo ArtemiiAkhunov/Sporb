@@ -50,7 +50,14 @@ public:
                 setVel({vel_.xvel, vel_.yvel + (deltaT * GRAVITY)});
             }
         }
-        setPos(attemptToEnter(src, {x, y}));
+        bn::fixed_point dst = {x, y};
+        bn::fixed_point checkedPos = attemptToEnter(src, dst);
+        if (checkedPos.y() != dst.y()) {
+            // grounded
+            setGravity(false);
+            vel_.yvel = 0;
+        }
+        setPos(checkedPos);
     };
     void setWorkaroundPos(bn::fixed_point pos) { pos_ = pos; sprite_ptr_.set_position(pos); };
 
