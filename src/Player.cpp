@@ -106,56 +106,136 @@ public:
   }
 
   bn::fixed_point attemptToEnter(bn::fixed_point src, bn::fixed_point dst) override {
-    bn::vector<int, 256> tilesWeCross(0);
-    float dist = distance(src, dst);
-    // BN_LOG("DIST", (int) dist);
-    if ((int) dist == 0) return dst;
-    int steps = dist;
-    bn::fixed_point pos = src;
-    bn::fixed_point step_size = (dst - src).safe_division(dist);
-    BN_LOG(pos.x(), " ", pos.y());
-    int i;
-
-    for (i = 0; i < steps; i++) {
-      pos += step_size;
-      if ((*tiles_)[pixel_to_tile(pos)]) {
-        BN_LOG("COLLIDED!", (int)getVel().xvel, " ", (int) getVel().yvel, " ", pixel_to_tile(pos)); 
-        bn::fixed new_x = pos.x();
-        bn::fixed new_y = pos.y();
-        bn::fixed dx = step_size.x();
-        bn::fixed dy = step_size.y();
-
-        // HANDLE X COLLISION
-        if ((*tiles_)[pixel_to_tile(pos - (bn::fixed_point) {0, dy})]) {
-          if (step_size.x() > 0.0f) { // Moving right
-            new_x = pos.x() - (pos.x() % 32)- 16; // LEFT EDGE
-            dx = new_x - pos.x();
-          } else {
-            new_x = pos.x() - (pos.x() % 32) + 31 + 16; // RIGHT EDGE
-            dx = new_x - pos.x();
+    bn::fixed_point result = dst;
+    // X
+    bn::fixed distX = (dst.x() - src.x());
+    if (distX.integer() != 0) {
+      bn::fixed_point pos = src;
+      if (distX > 0) {
+        // positive
+        bn::fixed_point step_size = {1, 0};
+        for (int i = 0; i < distX; i++) {
+          pos += step_size;
+          if ((*tiles_)[pixel_to_tile(pos)]) {
+            BN_LOG("COLLIDED!", (int)getVel().xvel, " ", (int) getVel().yvel, " ", pixel_to_tile(pos));
+            // return pos - step_size;
+            result.set_x(pos.x() - step_size.x());
+            break;
           }
         }
-        pos.set_x(new_x);
-        // HANDLE Y COLLISION 
-        if ((*tiles_)[pixel_to_tile(pos - (bn::fixed_point) {dx, 0})]) {
-          if (step_size.y() > 0.0f) { // Moving down
-            new_y = pos.y() - (pos.y() % 32) + 16; // TOP EDGE  
-          } else {
-            new_y = pos.y() - (pos.y() % 32) + 31 - 16; // BOTTOM EDGE
+      } else {
+        bn::fixed_point step_size = {-1, 0};
+        for (int i = 0; i > distX; i--) {
+          pos += step_size;
+          if ((*tiles_)[pixel_to_tile(pos)]) {
+            BN_LOG("COLLIDED!", (int)getVel().xvel, " ", (int) getVel().yvel, " ", pixel_to_tile(pos));
+            // return pos - step_size;
+            result.set_x(pos.x() - step_size.x());
+            break;
           }
         }
-
-        pos.set_y(new_y);
-
-        return pos;
       }
     }
-    if (dst.x() < -X_BORDER) {
-      dst.set_x(-X_BORDER);
-    } else if (dst.x() > X_BORDER) {
-      dst.set_x(X_BORDER);
+    // Y
+    bn::fixed distY = (dst.y() - src.y());
+    if (distY.integer() != 0) {
+      bn::fixed_point pos = src;
+      if (distY > 0) {
+        // positive
+        bn::fixed_point step_size = {0, 1};
+        for (int i = 0; i < distY; i++) {
+          pos += step_size;
+          if ((*tiles_)[pixel_to_tile(pos)]) {
+            BN_LOG("COLLIDED!", (int)getVel().xvel, " ", (int) getVel().yvel, " ", pixel_to_tile(pos));
+            // return pos - step_size;
+            result.set_y(pos.y() - step_size.y());
+            break;
+          }
+        }
+      } else {
+        bn::fixed_point step_size = {0, -1};
+        for (int i = 0; i > distY; i--) {
+          pos += step_size;
+          if ((*tiles_)[pixel_to_tile(pos)]) {
+            BN_LOG("COLLIDED!", (int)getVel().xvel, " ", (int) getVel().yvel, " ", pixel_to_tile(pos));
+            // return pos - step_size;
+            result.set_y(pos.y() - step_size.y());
+            break;
+          }
+        }
+      }
     }
-    return dst;
+    return result;
+
+
+
+    // float dist = distance(src, dst);
+    // // BN_LOG("DIST", (int) dist);
+    // if ((int) dist == 0) return dst;
+    // int steps = dist;
+    // bn::fixed_point pos = src;
+    // bn::fixed_point step_size = (dst - src).safe_division(dist);
+    // BN_LOG(pos.x(), " ", pos.y());
+    // int i;
+
+    // for (i = 0; i < steps; i++) {
+    //   pos += step_size;
+    //   if ((*tiles_)[pixel_to_tile(pos)]) {
+    //     BN_LOG("COLLIDED!", (int)getVel().xvel, " ", (int) getVel().yvel, " ", pixel_to_tile(pos));
+    //     return pos - step_size;
+    //   }
+    // }
+    // return dst;
+    // bn::vector<int, 256> tilesWeCross(0);
+    // float dist = distance(src, dst);
+    // // BN_LOG("DIST", (int) dist);
+    // if ((int) dist == 0) return dst;
+    // int steps = dist;
+    // bn::fixed_point pos = src;
+    // bn::fixed_point step_size = (dst - src).safe_division(dist);
+    // BN_LOG(pos.x(), " ", pos.y());
+    // int i;
+
+    // for (i = 0; i < steps; i++) {
+    //   pos += step_size;
+    //   if ((*tiles_)[pixel_to_tile(pos)]) {
+    //     BN_LOG("COLLIDED!", (int)getVel().xvel, " ", (int) getVel().yvel, " ", pixel_to_tile(pos)); 
+    //     bn::fixed new_x = pos.x();
+    //     bn::fixed new_y = pos.y();
+    //     bn::fixed dx = step_size.x();
+    //     bn::fixed dy = step_size.y();
+
+    //     // HANDLE X COLLISION
+    //     if ((*tiles_)[pixel_to_tile(pos - (bn::fixed_point) {0, dy})]) {
+    //       if (step_size.x() > 0.0f) { // Moving right
+    //         new_x = pos.x() - (pos.x() % 32); // LEFT EDGE
+    //         dx = new_x - pos.x();
+    //       } else {
+    //         new_x = pos.x() - (pos.x() % 32) + 32; // RIGHT EDGE
+    //         dx = new_x - pos.x();
+    //       }
+    //     }
+    //     pos.set_x(new_x);
+    //     // HANDLE Y COLLISION 
+    //     if ((*tiles_)[pixel_to_tile(pos - (bn::fixed_point) {dx, 0})]) {
+    //       if (step_size.y() > 0.0f) { // Moving down
+    //         new_y = pos.y() - (pos.y() % 32); // TOP EDGE  
+    //       } else {
+    //         new_y = pos.y() - (pos.y() % 32) + 32; // BOTTOM EDGE
+    //       }
+    //     }
+
+    //     pos.set_y(new_y);
+
+    //     return pos;
+    //   }
+    // }
+    // if (dst.x() < -X_BORDER) {
+    //   dst.set_x(-X_BORDER);
+    // } else if (dst.x() > X_BORDER) {
+    //   dst.set_x(X_BORDER);
+    // }
+    // return dst;
   }
 
 private:
