@@ -81,7 +81,7 @@ public:
   }
 
   static inline int pixel_to_tile(bn::fixed_point pos) {
-    return  ((((pos.y()) + 256) / 32) * 16 + (((pos.x()) + 240) / 32)).integer();
+    return (((pos.y().integer()) + 256) / 32) * 16 + (((pos.x().integer()) + 256) / 32);
   }
 
   bn::fixed_point attemptToEnter(bn::fixed_point src, bn::fixed_point dst) override {
@@ -116,12 +116,16 @@ public:
     for (i = 0; i < steps; i++) {
       pos += step_size;
       if ((*tiles_)[pixel_to_tile(pos)]) {
-        BN_LOG("COLLIDED!", (int)getVel().xvel, " ", (int) getVel().yvel);
+        BN_LOG("COLLIDED!", (int)getVel().xvel, " ", (int) getVel().yvel, " ", pixel_to_tile(pos));
         return pos - step_size;
       }
     }
     return dst;
-}
+  }
+  bool grounded(bn::fixed_point pos) override {
+    return ((*tiles_)[pixel_to_tile(pos + (bn::fixed_point) {0, 1})]);
+  }
+
 private:
   bool isDash = true;
   bool touchedGround = false;

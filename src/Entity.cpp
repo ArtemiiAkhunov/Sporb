@@ -30,6 +30,7 @@ public:
       sprite_ptr_.set_position(0, 0);
     }
     virtual bn::fixed_point attemptToEnter(bn::fixed_point src, bn::fixed_point dst) { return dst; };
+    virtual bool grounded(bn::fixed_point pos) { return false; }
 
     // Mutators
     virtual void setPos(bn::fixed_point pos) {
@@ -54,9 +55,10 @@ public:
         bn::fixed_point checkedPos = attemptToEnter(src, dst);
         if (checkedPos.y() != dst.y()) {
             // grounded
-            setGravity(false);
+            gravity_ = false;;
             vel_.yvel = 0;
         }
+        // if (!gravity_ && !grounded(checkedPos)) gravity_ = true;
         setPos(checkedPos);
     };
     void setWorkaroundPos(bn::fixed_point pos) { pos_ = pos; sprite_ptr_.set_position(pos); };
