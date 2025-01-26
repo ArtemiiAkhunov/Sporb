@@ -1,3 +1,4 @@
+#include "bn_assert.h"
 #include "bn_bg_palettes.h"
 #include "bn_core.h"
 #include "bn_fixed_point_fwd.h"
@@ -128,7 +129,8 @@ int main() {
   float speed = -0.025;
 
   while (true) {
-    float deltaT = counter.elapsed_ticks_with_restart() / ticks_per_second;
+    float deltaT = 1.0f;
+    // BN_ASSERT(false, "thing", counter.elapsed_ticks_with_restart(), " ", (int) ticks_per_second);
 
     // DISPLAY_SKY
     if (bn::keypad::left_held()) {

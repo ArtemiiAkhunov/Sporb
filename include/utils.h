@@ -6,7 +6,7 @@ typedef struct {
   float yvel;
 } velocity_t;
 
-#define GRAVITY (-0.25f)
+#define GRAVITY (0.15f)
 #define PLAYER_SPEED (40.0f)
 #define DASH_COOLDOWN (100)
 #define DASH_LENGTH (20)

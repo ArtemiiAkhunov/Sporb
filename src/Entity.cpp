@@ -1,3 +1,4 @@
+#include "bn_assert.h"
 #include "bn_fixed_fwd.h"
 #include "bn_fixed_point_fwd.h"
 #include "bn_sprite_animate_actions.h"
@@ -11,7 +12,7 @@ public:
     const int start_y; // Y-coordinate
     // Constructor
     Entity(bn::sprite_ptr& sprite_ptr, const bn::sprite_item *sprite_item)
-        : sprite_ptr_(sprite_ptr), start_x(sprite_ptr.x()), start_y(sprite_ptr.y()) ,animation_(bn::create_sprite_animate_action_forever(sprite_ptr, 1, sprite_item->tiles_item(), 0, 0, 0, 0)) {
+        : sprite_ptr_(sprite_ptr), start_x(sprite_ptr.x()), start_y(sprite_ptr.y()) ,animation_(bn::create_sprite_animate_action_forever(sprite_ptr, 1, sprite_item->tiles_item(), 0, 0, 0, 0)), gravity_(true) {
         }
 
     // Accessors
@@ -22,7 +23,7 @@ public:
         return true;
     };
     velocity_t getVel() const { return vel_; };
-    bool isGravity() { return false; };
+    bool isGravity() { return gravity_; };
 
     // Mutators
     virtual void setPos(bn::fixed_point pos) {
@@ -31,11 +32,15 @@ public:
     }
     virtual void tick(float deltaTime) {};
     void setVel(velocity_t vel) { vel_ = vel; };
-    void setGravity(bool gravity) { gravity_ = gravity; };
+    void setGravity(bool gravity) { gravity_ = gravity;};
     void tickPhysics(float deltaT) {
         bn::fixed y = pos_.y().to_float() + (vel_.yvel * deltaT);
-        if (gravity_) y += (0.5f * (deltaT * deltaT) * GRAVITY);
         bn::fixed x = pos_.x().to_float() + (vel_.xvel * deltaT);
+        if (gravity_) {
+            y += (0.5f * (deltaT * deltaT) * GRAVITY);
+            // BN_ASSERT(false, "YOU STUPIOD", y);
+            setVel({vel_.xvel, vel_.yvel + (deltaT * GRAVITY)});
+        }
         setPos({x, y});
     };
     void setWorkaroundPos(bn::fixed_point pos) { pos_ = pos; sprite_ptr_.set_position(pos); };

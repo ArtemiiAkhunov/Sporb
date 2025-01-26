@@ -1,3 +1,4 @@
+#include "bn_assert.h"
 #include "bn_camera_ptr.h"
 #include "bn_fixed_point_fwd.h"
 #include "bn_keypad.h"
@@ -8,12 +9,13 @@ class Player : private Entity {
 public:
   Player(bn::sprite_ptr& sprite_ptr, const bn::sprite_item *sprite_item) : Entity(sprite_ptr, sprite_item), camera_(bn::camera_ptr::create(getPos())) {
     sprite_ptr.set_camera(camera_);
+    setGravity(true);
   }
   void tick(float deltaTime) override {
     // TODO: update is touching ground
     velocity_t current_velocity = getVel();
 
-    if (!isDash) { 
+    if (!isDash) {
       if(dashCoolDown > 0) {
         dashCoolDown --;
       }

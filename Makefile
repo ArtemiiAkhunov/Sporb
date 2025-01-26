@@ -48,7 +48,7 @@ USERLDFLAGS 	:=
 USERLIBDIRS 	:=  
 USERLIBS    	:=  
 DEFAULTLIBS 	:=  
-STACKTRACE		:=	
+STACKTRACE		:=	true
 USERBUILD   	:=  
 EXTTOOL     	:=  @$(PYTHON) -B bntmx.py --target=butano --build=$(BUILD) $(MAPS)
 
