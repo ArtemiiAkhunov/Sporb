@@ -3,6 +3,7 @@
 #include "bn_fixed_point_fwd.h"
 #include "bn_log.h"
 #include "bn_sprite_animate_actions.h"
+#include "bn_sprite_actions.h"
 #include "bn_sprite_item.h"
 #include "bn_sprite_ptr.h"
 #include "utils.h"
@@ -39,31 +40,21 @@ public:
     }
 
     void setAnimationOrder(int type) {
-      if (type == 0 ) { // RIGHT IDLE
+      if (type == 0 ) { // IDLE
         animation_ = bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_.tiles_item(), IDLE);
-      } else if (type == 1) { // LEFT_IDLE
-        animation_ = bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_.tiles_item(), IDLE);
-      }else if(type == 2) { // RIGHT_WALK
+      } else if(type == 1) { // WALK
         animation_ = bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_WALK);
-      } else if (type == 3) { // LEFT_WALK
-        animation_ =  bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_WALK);
-        bn::sprite_horizontal_flip_toggle_action::sprite_horizontal_flip_toggle_action(sprite_ptr_, 0);
-      } else if (type == 4) { // RIGHT_JUMP
+      } else if (type == 2) { // JUMP
         animation_ =  bn::create_sprite_animate_action_once(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_JUMP);
-      } else if (type == 5) {// LEFT_JUMP 
-        animation_ =  bn::create_sprite_animate_action_once(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_JUMP);
-        bn::sprite_horizontal_flip_toggle_action::sprite_horizontal_flip_toggle_action(sprite_ptr_, 0);
-      } else if (type == 6) { // RIGHT_DASH
+      } else if (type == 3) { // DASH
         animation_ =  bn::create_sprite_animate_action_once(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_DASH);
-        bn::sprite_horizontal_flip_toggle_action::sprite_horizontal_flip_toggle_action(sprite_ptr_, 0);
-      } else if(type == 7) { // LEFT_SHASH
-        animation_ =  bn::create_sprite_animate_action_once(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_DASH);
-        bn::sprite_horizontal_flip_toggle_action::sprite_horizontal_flip_toggle_action(sprite_ptr_, 0);
-      }
+      } else if (type == 4) { // FALL
+        animation_ =  bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_FALL);
+      } 
     }
 
-    void flipAnimmation() {
-      bn::sprite_horizontal_flip_toggle_action::sprite_horizontal_flip_toggle_action(sprite_ptr_, 0);
+    void flipAnimmation(bool flip) {
+      sprite_ptr_.set_vertical_flip(flip);
     }
 
     void animationUpdate() {

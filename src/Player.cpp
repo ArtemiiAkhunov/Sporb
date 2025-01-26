@@ -49,16 +49,35 @@ public:
       if(bn::keypad::left_held()) {
         current_velocity.xvel = -PLAYER_SPEED;
         facingLeft = true;
+        flipAnimmation(true);
+        if (grounded(current_pos) && (((int) current_pos.y()) % 32) >= JUMP_POSITION) { // Walking
+          setAnimationOrder(1);
+        } else { // falling
+          setAnimationOrder(4);
+        }
       } else if (bn::keypad::right_held()) {
         current_velocity.xvel = PLAYER_SPEED;
         facingLeft = false;
+        flipAnimmation(false);
+        if (grounded(current_pos) && (((int) current_pos.y()) % 32) >= JUMP_POSITION) { // Walking
+          setAnimationOrder(1);
+        } else { // falling
+          setAnimationOrder(4);
+        }
       } else { // TODO: Add descelate dive
         current_velocity.xvel = 0.0f;
+
+        if (grounded(current_pos) && (((int) current_pos.y()) % 32) >= JUMP_POSITION) { // idle
+          setAnimationOrder(0);
+        } else { // falling
+          setAnimationOrder(4);
+        }
       }
 
       if (bn::keypad::a_pressed() && grounded(current_pos) && (((int) current_pos.y()) % 32) >= JUMP_POSITION) {
         current_velocity.yvel = JUMP_SPEED;
         setGravity(true);
+        setAnimationOrder(2);
         // Do we need to do anything else here?
       } 
     }
@@ -68,11 +87,9 @@ public:
       if (dashTime > 0) {
         dashTime --;
         current_velocity.xvel = DASH_SPEED;
+        setAnimationOrder(3);
         if (facingLeft) {
-          setAnimationOrder(7);
           current_velocity.xvel = -DASH_SPEED;
-        } else {
-          setAnimationOrder(6);
         }
         current_velocity.yvel = 0.0f;
       } else {
@@ -80,6 +97,11 @@ public:
         dashCoolDown = DASH_COOLDOWN;
         if (!grounded(current_pos)) {
           setGravity(true);
+        }
+        if (grounded(current_pos) && (((int) current_pos.y()) % 32) >= JUMP_POSITION) { // idle
+          setAnimationOrder(0);
+        } else { // falling
+          setAnimationOrder(4);
         }
       }
     }
@@ -91,6 +113,7 @@ public:
     current_pos = getPos();
 
     setPos(current_pos);
+    animationUpdate();
     
   }
 
@@ -178,7 +201,7 @@ private:
   int dashCoolDown = 0;
   int dashTime = 0;
   bool facingLeft = false;
-t bn::camera_ptr camera_;
+  bn::camera_ptr camera_;
   const bn::span<const bntmx::map_tile>* tiles_;
   const int rows;
   const int cols;
