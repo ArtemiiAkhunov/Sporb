@@ -41,7 +41,7 @@ public:
 private:
     bn::sprite_ptr sprite_ptr_;
     bn::fixed_point pos_;
-    bn::sprite_animate_action<4> animation;
+    bn::sprite_animate_action animation<4>;
     velocity_t vel_;
     bool gravity_;
 };
