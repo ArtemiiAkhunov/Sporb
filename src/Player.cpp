@@ -18,24 +18,46 @@ public:
   Player(bn::sprite_ptr& sprite_ptr, const bn::sprite_item *sprite_item, bn::camera_ptr camera, bn::span<const bntmx::map_tile>* tiles, int rows, int cols) : Entity(sprite_ptr, sprite_item), camera_(camera), tiles_(tiles), rows(rows), cols(cols) {
     setGravity(true);
   }
+
+  bool grounded(bn::fixed_point pos) override {
+    return ((*tiles_)[pixel_to_tile(pos + (bn::fixed_point) {0, 16})]);
+  }
+
   void tick(float deltaTime) override {
     // TODO: update is touching ground
     velocity_t current_velocity = getVel();
+    bn::fixed_point current_pos = getPos();
+
+    if (grounded(current_pos)) {
+      touchedGround = true;
+    }
 
     if (!isDash) {
       if(dashCoolDown > 0) {
         dashCoolDown --;
       }
-      if(bn::keypad::left_held()) {
-        current_velocity.xvel = -PLAYER_SPEED;
-      } else if (bn::keypad::right_held()) {
-        current_velocity.xvel = PLAYER_SPEED;
-      } else if (bn::keypad::r_pressed() && dashCoolDown == 0 && touchedGround) {
+
+      BN_LOG("HELO!", bn::keypad::left_held());
+
+      if (bn::keypad::r_pressed() && dashCoolDown == 0 && touchedGround) {
         isDash = true;
         dashTime = DASH_LENGTH;
         setGravity(false);
         touchedGround = false;
         // TODO: Reduce air capacity
+      }
+
+      if(bn::keypad::left_held()) {
+        current_velocity.xvel = -PLAYER_SPEED;
+        facingLeft = true;
+      } else if (bn::keypad::right_held()) {
+        current_velocity.xvel = PLAYER_SPEED;
+        facingLeft = false;
+      }
+      if (bn::keypad::a_pressed() && grounded(current_pos)) {
+        current_velocity.yvel = JUMP_SPEED;
+        setGravity(true);
+        // Do we need to do anything else here?
       } else { // TODO: Add descelate dive
         current_velocity.xvel = 0.0f;
       }
@@ -46,11 +68,16 @@ public:
       if (dashTime > 0) {
         dashTime --;
         current_velocity.xvel = DASH_SPEED;
+        if (facingLeft) {
+          current_velocity.yvel = -DASH_SPEED;
+        }
         current_velocity.yvel = 0.0f;
       } else {
         isDash = false;
         dashCoolDown = DASH_COOLDOWN;
-        setGravity(true);
+        if (!grounded(current_pos)) {
+          setGravity(true);
+        }
       }
     }
 
@@ -58,9 +85,9 @@ public:
     setVel(current_velocity);
     this->tickPhysics(deltaTime);
 
-    bn::fixed_point current_position = getPos();
+    current_pos = getPos();
 
-    setPos(current_position);
+    setPos(current_pos);
     /*if (isDash) { // TODO: Animations
       
     } else {
@@ -122,15 +149,13 @@ public:
     }
     return dst;
   }
-  bool grounded(bn::fixed_point pos) override {
-    return ((*tiles_)[pixel_to_tile(pos + (bn::fixed_point) {0, 16})]);
-  }
 
 private:
-  bool isDash = true;
+  bool isDash = false;
   bool touchedGround = false;
   int dashCoolDown = 0;
   int dashTime = 0;
+  bool facingLeft = false;
   bn::camera_ptr camera_;
   const bn::span<const bntmx::map_tile>* tiles_;
   const int rows;
