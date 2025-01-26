@@ -139,7 +139,7 @@ int main() {
   
   bn::sprite_ptr character_sprite = bn::sprite_items::astronaut.create_sprite(0, 0);
 
-  Player character = Player(character_sprite);
+  Player character = Player(character_sprite, &bn::sprite_items::astronaut);
 
   while (true) {
     float deltaT = counter.elapsed_ticks_with_restart() / ticks_per_second;

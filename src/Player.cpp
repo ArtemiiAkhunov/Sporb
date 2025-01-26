@@ -4,6 +4,9 @@
 
 class Player : private Entity {
 public:
+  Player(const bn::sprite_ptr& sprite_ptr, const bn::sprite_item *sprite_item) : Entity(sprite_ptr, sprite_item) {
+
+  }
   void tick(float deltaTime) override {
     // TODO: update is touching ground
     velocity_t current_velocity = getVel();

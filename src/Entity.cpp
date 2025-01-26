@@ -1,5 +1,6 @@
 #include "bn_fixed_fwd.h"
 #include "bn_fixed_point_fwd.h"
+#include "bn_sprite_animate_actions.h"
 #include "bn_sprite_item.h"
 #include "bn_sprite_ptr.h"
 #include "utils.h"
@@ -9,8 +10,8 @@ public:
     const int start_x; // X-coordinate
     const int start_y; // Y-coordinate
     // Constructor
-    Entity(const bn::sprite_ptr& sprite_ptr)
-        : sprite_ptr_(sprite_ptr), start_x(sprite_ptr.x()), start_y(sprite_ptr.y()) {
+    Entity(const bn::sprite_ptr& sprite_ptr, const bn::sprite_item *sprite_item)
+        : sprite_ptr_(sprite_ptr), start_x(sprite_ptr.x()), start_y(sprite_ptr.y()) ,animation_(bn::create_sprite_animate_action_forever(sprite_ptr, 1, sprite_item->tiles_item(), 0, 0, 0, 0)) {
         }
 
     // Accessors
@@ -41,7 +42,7 @@ public:
 private:
     bn::sprite_ptr sprite_ptr_;
     bn::fixed_point pos_;
-    bn::sprite_animate_action animation<4>;
+    bn::sprite_animate_action<4> animation_;
     velocity_t vel_;
     bool gravity_;
 };
