@@ -81,7 +81,7 @@ public:
   }
 
   static inline int pixel_to_tile(bn::fixed_point pos) {
-    return  ((((pos.y()) + 80) / 32) * 16 + (((pos.x()) + 120) / 32)).integer();
+    return  ((((pos.y()) + 256) / 32) * 16 + (((pos.x()) + 240) / 32)).integer();
   }
 
   bn::fixed_point attemptToEnter(bn::fixed_point src, bn::fixed_point dst) override {
@@ -101,7 +101,7 @@ public:
     for (i = 0; i < steps; i++) {
       pos += step_size;
       if ((*tiles_)[pixel_to_tile(pos)]) {
-        BN_LOG("COLLIDED!");
+        BN_LOG("COLLIDED!", (int)getVel().xvel, " ", (int) getVel().yvel);
         return pos - step_size;
       }
     }

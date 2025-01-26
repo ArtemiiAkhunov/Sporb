@@ -87,6 +87,7 @@ int main() {
   bn::camera_ptr root_camera = bn::camera_ptr::create(0, 0);
   Player character = Player(character_sprite, &bn::sprite_items::astronaut, root_camera, &tiles, rows, cols);
   // character_sprite.remove_camera();
+  character_sprite.set_camera(root_camera);
 
   bn::regular_bg_ptr sky = bn::regular_bg_items::sky.create_bg(-56, -56);
   bn::regular_bg_ptr level = bn::regular_bg_items::testmap2.create_bg(0,0);

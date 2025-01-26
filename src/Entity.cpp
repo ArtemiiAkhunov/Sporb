@@ -46,7 +46,9 @@ public:
         if (gravity_) {
             y += (0.5f * (deltaT * deltaT) * GRAVITY);
             // BN_ASSERT(false, "YOU STUPIOD", y);
-            setVel({vel_.xvel, vel_.yvel + (deltaT * GRAVITY)});
+            if (vel_.yvel < MAX_SPEED) {
+                setVel({vel_.xvel, vel_.yvel + (deltaT * GRAVITY)});
+            }
         }
         setPos(attemptToEnter(src, {x, y}));
     };
