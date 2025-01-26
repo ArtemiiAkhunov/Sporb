@@ -87,10 +87,9 @@ public:
 
     current_pos = getPos();
 
-    setPos(current_pos);
-      
-    }
+    setPos(current_pos);  
   }
+  
   void setPos(bn::fixed_point pos) override {
     setWorkaroundPos(pos);
     camera_.set_position(pos);
