@@ -304,10 +304,11 @@ class TMXConverter:
         # Get the C or C++ array literal for the given list of tiles, matching lines and columns of the map for readability.
         tiles_to_array_literal = lambda tiles: multiline_c_array([",".join(tiles[i:i + width_in_tiles]) for i in range(0, len(tiles), width_in_tiles)], indentation, indentation_depth + 1)
         # Get the C or C++ array literal of tiles for the given tiles layer path.
-        tiles_layer_path_to_array_literal = lambda layer_path: tiles_to_array_literal(self._tmx.tiles(layer_path))
+        tiles_layer_path_to_array_literal = lambda layer_path: tiles_to_array_literal([i if int(i) < 200 else str(int(i) - 2147483648) for i in self._tmx.tiles(layer_path)])
         # Get the C or C++ array literal of tiles layers for the given tiles layer paths.
         tiles_literal = multiline_c_array(list(map(tiles_layer_path_to_array_literal, self._descriptor["tiles"] if "tiles" in self._descriptor else [])), indentation, indentation_depth)
-
+        print(self._tmx.tiles("level"))
+        # 
         if n_objects == 0 or n_objects_classes == 0 or n_objects_layers == 0:
             object_getter = template['object_dummy']
             objects_definition = template['objects_definition_empty']
