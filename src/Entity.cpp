@@ -1,7 +1,6 @@
 #include "bn_fixed_fwd.h"
 #include "bn_fixed_point_fwd.h"
 #include "bn_sprite_item.h"
-#include "bn_sprite_items_astronaut.h"
 #include "bn_sprite_ptr.h"
 #include "utils.h"
 
@@ -10,12 +9,11 @@ public:
     const int start_x; // X-coordinate
     const int start_y; // Y-coordinate
     // Constructor
-    Entity(const bn::sprite_item sprite, int x, int y)
-        : sprite_(sprite), sprite_ptr_(sprite.create_sprite(x, y)), start_x(x), start_y(y) {
+    Entity(const bn::sprite_ptr& sprite_ptr)
+        : sprite_ptr_(sprite_ptr), start_x(sprite_ptr.x()), start_y(sprite_ptr.y()) {
         }
 
     // Accessors
-    const bn::sprite_item getSpriteItem() const { return sprite_; }
     bn::fixed_point getPos() const {
         return pos_;
     };
@@ -28,6 +26,7 @@ public:
     // Mutators
     void setPos(bn::fixed_point pos) {
       sprite_ptr_.set_position(pos);
+      pos_ = pos;
     }
     virtual void tick(float deltaTime) {};
     void setVel(velocity_t vel) { vel_ = vel; };
@@ -40,9 +39,9 @@ public:
     };
 
 private:
-    const bn::sprite_item sprite_; // Reference to const sprite_item
     bn::sprite_ptr sprite_ptr_;
     bn::fixed_point pos_;
+    bn::sprite_animate_action<4> animation;
     velocity_t vel_;
     bool gravity_;
 };

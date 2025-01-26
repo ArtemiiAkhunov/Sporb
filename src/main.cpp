@@ -24,6 +24,8 @@
 #include "bn_sprite_text_generator.h"
 #include "bn_regular_bg_map_cell_info.h"
 
+#include "Player.cpp"
+
 void sprites_bg_move_scene() {
   bn::regular_bg_ptr sky = bn::regular_bg_items::sky.create_bg(-56, -56);
   bn::regular_bg_ptr level = bn::regular_bg_items::testmap2.create_bg(0,0);
@@ -91,16 +93,19 @@ int main() {
   // );
   
   // bn::regular_bg_ptr::create(0, 0, map_item, bn::regular_bg_tiles_items::foreground);
-
-  
   // bn::music_items::maybe.play();
 
-  bn::timer timer;
+  bn::timer counter = bn::timer();
   const float ticks_per_second = (float) bn::timers::ticks_per_second();
+  
+  bn::sprite_ptr character_sprite = bn::sprite_items::astronaut.create_sprite(0, 0);
+
+  Player character = Player(character_sprite&);
 
   while (true) {
-    float deltaT = timer.elapsed_ticks_with_restart() / ticks_per_second;
+    float deltaT = counter.elapsed_ticks_with_restart() / ticks_per_second;
 
+    character.tick(deltaT);
     // animation();
 
     sprites_bg_move_scene();
