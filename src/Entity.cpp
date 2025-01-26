@@ -58,7 +58,10 @@ public:
             gravity_ = false;;
             vel_.yvel = 0;
         }
-        // if (!gravity_ && !grounded(checkedPos)) gravity_ = true;
+        if (!gravity_ && !grounded(checkedPos)) {
+            gravity_ = true;
+            BN_LOG("Ungrounding");
+        }
         setPos(checkedPos);
     };
     void setWorkaroundPos(bn::fixed_point pos) { pos_ = pos; sprite_ptr_.set_position(pos); };
