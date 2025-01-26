@@ -81,7 +81,7 @@ public:
   }
 
   static inline int pixel_to_tile(bn::fixed_point pos) {
-    return (((pos.y().integer()) + 272) / 32) * 16 + (((pos.x().integer()) + 256) / 32);
+    return (((pos.y().integer()) + 256 + 16) / 32) * 16 + (((pos.x().integer()) + 256) / 32);
   }
 
   bn::fixed_point attemptToEnter(bn::fixed_point src, bn::fixed_point dst) override {
