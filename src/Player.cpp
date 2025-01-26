@@ -70,7 +70,7 @@ public:
         dashTime --;
         current_velocity.xvel = DASH_SPEED;
         if (facingLeft) {
-          current_velocity.yvel = -DASH_SPEED;
+          current_velocity.xvel = -DASH_SPEED;
         }
         current_velocity.yvel = 0.0f;
       } else {
