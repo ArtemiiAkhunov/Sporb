@@ -8,6 +8,7 @@
 #include "bn_sprite_items_ninja.h"
 #include "bn_sprite_ptr.h"
 #include "bn_regular_bg_items_sky.h"
+#include "bn_regular_bg_items_testmap2.h"
 
 #include "bn_camera_ptr.h"
 #include "bn_music_items.h"
@@ -15,10 +16,20 @@
 #include "bn_timer.h"
 #include "bn_timers.h"
 #include "bntmx_maps_testmap2.h"
+#include "bn_regular_bg_tiles_items_foreground.h"
+#include "bn_regular_bg_ptr.h"
+#include "bn_regular_bg_tiles_ptr.h"
+#include "bn_regular_bg_item.h"
+#include "bn_regular_bg_map_ptr.h"
+#include "bn_sprite_text_generator.h"
+#include "bn_regular_bg_map_cell_info.h"
 
 void sprites_bg_move_scene() {
   bn::regular_bg_ptr sky = bn::regular_bg_items::sky.create_bg(-56, -56);
+  bn::regular_bg_ptr level = bn::regular_bg_items::testmap2.create_bg(0,0);
   sky.set_priority(0);
+  level.set_priority(1);
+  // level.set_blending_enabled(true);
   float speed = 0.05;
 
   while(! bn::keypad::start_pressed()) {
@@ -65,7 +76,23 @@ int main() {
 
   bn::music_items::mainmelody.play();
   bntmx::map* map = new bntmx::maps::testmap2();
-  map->tiles(0).front()
+  auto tiles= map->tiles(0);
+  // int y;
+  // int x;
+  // int cols = map->dimensions_in_tiles().width();
+  // int rows = map->dimensions_in_tiles().height();
+  // for (y = 0; y < cols; y++) {
+    
+  // }
+  // auto thing = bn::regular_bg_tiles_items::foreground.create_tiles();
+  // bn::regular_bg_map_item map_item(
+  //   tiles[0], // Map data
+  //   bn::size(map->dimensions_in_tiles())
+  // );
+  
+  // bn::regular_bg_ptr::create(0, 0, map_item, bn::regular_bg_tiles_items::foreground);
+
+  
   // bn::music_items::maybe.play();
 
   bn::timer timer;

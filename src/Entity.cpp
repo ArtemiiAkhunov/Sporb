@@ -11,7 +11,7 @@ public:
     const int start_y; // Y-coordinate
     // Constructor
     Entity(const bn::sprite_item sprite, int x, int y)
-        : sprite_(sprite), sprite_ptr_(bn::sprite_items::astronaut.create_sprite(x, y)), start_x(x), start_y(y) {
+        : sprite_(sprite), sprite_ptr_(sprite.create_sprite(x, y)), start_x(x), start_y(y) {
         }
 
     // Accessors
