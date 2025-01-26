@@ -27,8 +27,7 @@
 #include "bn_regular_bg_map_cell_info.h"
 #include "utils.h"
 
-#define ABS(x) ((x) < 0 ? -(x) : (x))
-#define TILE_SIZE (32)
+
 
 #include "Player.cpp"
 
@@ -55,38 +54,7 @@ void animation() {
   // }
 }
 
-bn::fixed_point attemptToEnter(bn::span<bool>* tiles, bn::fixed_point src, bn::fixed_point dst, int cols, int rows) {
-    // Calculate the direction of movement
-    bn::fixed dx = dst.x() - src.x();
-    bn::fixed dy = dst.y() - src.y();
 
-    // Calculate the number of steps along the x and y axis
-    int steps = bn::max(ABS(dx.integer()), ABS(dx.integer()));  // Max steps in x or y direction
-
-    // Calculate the step size in each direction
-    bn::fixed x_step = dx / steps;
-    bn::fixed y_step = dy / steps;
-
-    // Start from the src position
-    bn::fixed_point current_pos = src;
-
-    // Iterate over each step and check for collisions
-    for (int i = 0; i <= steps; ++i) {
-        int tile_x = current_pos.x().integer() / TILE_SIZE;
-        int tile_y = current_pos.y().integer() / TILE_SIZE;
-
-        // Check if the current tile is collidable
-        if (tile_x >= 0 && tile_y >= 0 && tile_x < rows && tile_y < cols && (*tiles)[tile_y * cols + tile_x]) {
-            return current_pos;  // Return the furthest valid point
-        }
-
-        // Move to the next step
-        current_pos.set_x(current_pos.x() + x_step);
-        current_pos.set_y(current_pos.y() + y_step);
-    }
-
-    return dst;  // No collision, return the destination
-}
 
 int main() {
 
@@ -120,7 +88,8 @@ int main() {
   character_sprite.set_bg_priority(0);
 
   bn::camera_ptr root_camera = bn::camera_ptr::create(0, 0);
-  Player character = Player(character_sprite, &bn::sprite_items::astronaut);
+  Player character = Player(character_sprite, &bn::sprite_items::astronaut, root_camera);
+  // character_sprite.remove_camera();
 
   bn::regular_bg_ptr sky = bn::regular_bg_items::sky.create_bg(-56, -56);
   bn::regular_bg_ptr level = bn::regular_bg_items::testmap2.create_bg(0,0);
