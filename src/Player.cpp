@@ -37,7 +37,7 @@ public:
         dashCoolDown --;
       }
 
-      BN_LOG("HELO!", bn::keypad::left_held());
+      BN_LOG("HELO! ", bn::keypad::left_held());
 
       if (bn::keypad::r_pressed() && dashCoolDown == 0 && touchedGround) {
         isDash = true;
@@ -49,19 +49,20 @@ public:
 
       if(bn::keypad::left_held()) {
         current_velocity.xvel = -PLAYER_SPEED;
+        BN_LOG("SET PLAYER_SPEED");
         facingLeft = true;
       } else if (bn::keypad::right_held()) {
         current_velocity.xvel = PLAYER_SPEED;
         facingLeft = false;
+      } else { // TODO: Add descelate dive
+        current_velocity.xvel = 0.0f;
       }
+
       if (bn::keypad::a_pressed() && grounded(current_pos)) {
         current_velocity.yvel = JUMP_SPEED;
         setGravity(true);
         // Do we need to do anything else here?
-      } else { // TODO: Add descelate dive
-        current_velocity.xvel = 0.0f;
-      }
-    }
+      }     }
 
 
     if (isDash) {
