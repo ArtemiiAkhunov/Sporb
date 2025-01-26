@@ -126,7 +126,18 @@ public:
         bn::fixed dy = step_size.y();
 
         // HANDLE X COLLISION
-        if ((*tiles_)[pixel_to_tile(pos - (bn::fixed_point) {0, dy})]) {
+        
+        if ((*tiles_)[pixel_to_tile(pos - (bn::fixed_point) {dx, 0})]) {
+          if (step_size.y() > 0.0f) { // Moving down
+            new_y = pos.y() - (pos.y() % 32) + 16; // TOP EDGE
+          } else {
+            new_y = pos.y() - (pos.y() % 32) + 31 - 16; // BOTTOM EDGE
+          }
+        }
+
+        pos.set_y(new_y);
+
+        if ((*tiles_)[pixel_to_tile(pos)]) {
           if (step_size.x() > 0.0f) { // Moving right
             new_x = pos.x() - (pos.x() % 32)- 16; // LEFT EDGE
             dx = new_x - pos.x();
@@ -137,15 +148,7 @@ public:
         }
         pos.set_x(new_x);
         // HANDLE Y COLLISION 
-        if ((*tiles_)[pixel_to_tile(pos - (bn::fixed_point) {dx, 0})]) {
-          if (step_size.y() > 0.0f) { // Moving down
-            new_y = pos.y() - (pos.y() % 32) + 16; // TOP EDGE  
-          } else {
-            new_y = pos.y() - (pos.y() % 32) + 31 - 16; // BOTTOM EDGE
-          }
-        }
 
-        pos.set_y(new_y);
 
         return pos;
       }
