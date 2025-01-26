@@ -87,6 +87,10 @@ int main() {
   level.set_camera(root_camera);
   // level.set_blending_enabled(true);
   float speed = -0.025;
+  // auto objects = map->objects(0);
+  // for (int i = 0; i < objects.size(); i++) {
+  //   objects[i].id
+  // }
 
   while (true) {
     float deltaT = 1.0f;
