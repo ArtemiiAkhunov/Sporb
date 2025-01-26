@@ -4,13 +4,18 @@
 #include "bn_keypad.h"
 #include "bn_sprite_ptr.h"
 #include "Entity.cpp"
+#include "bn_vector.h"
+#include "bntmx.h"
+#include "bn_math.h"
+#include "utils.h"
 
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #define TILE_SIZE (32)
+#define DISTANCE(src,dst) ()
 
 class Player : private Entity {
 public:
-  Player(bn::sprite_ptr& sprite_ptr, const bn::sprite_item *sprite_item, bn::camera_ptr camera, bn::span<bool>* tiles, int rows, int cols) : Entity(sprite_ptr, sprite_item), camera_(camera), tiles_(tiles), rows(rows), cols(cols) {
+  Player(bn::sprite_ptr& sprite_ptr, const bn::sprite_item *sprite_item, bn::camera_ptr camera, bn::span<const bntmx::map_tile>* tiles, int rows, int cols) : Entity(sprite_ptr, sprite_item), camera_(camera), tiles_(tiles), rows(rows), cols(cols) {
     setGravity(true);
   }
   void tick(float deltaTime) override {
@@ -70,45 +75,45 @@ public:
     //zeroSpritePointer();
     //BN_ASSERT(false, "BRUH:", camera_.x(), " ", camera_.y());
   }
+
+  static inline float distance(bn::fixed_point src, bn::fixed_point dst) {
+    return bn::sqrt((float) (((dst.x() - src.x()) * (dst.x() - src.x())) + (dst.y() - src.y()) * (dst.y() - src.y())));
+  }
+
+  static inline int pixel_to_tile(bn::fixed_point pos) {
+    return  ((((pos.y()) + 80) / 32) * 16 + (((pos.x()) + 120) / 32)).integer();
+  }
+
+  bn::fixed_point attemptToEnter(bn::fixed_point src, bn::fixed_point dst) override {
+    // determine tiles we start, end in, and pass through
+    // check, from start to end, for the first tile that is collidable
+    // return a position just outside that tile
+    bn::vector<int, 256> tilesWeCross(0);
+    float dist = distance(src, dst);
+    // BN_LOG("DIST", (int) dist);
+    if ((int) dist == 0) return dst;
+    int steps = dist;
+    bn::fixed_point pos = src;
+    bn::fixed_point step_size = (dst - src).safe_division(dist);
+    BN_LOG(pos.x(), " ", pos.y());
+    int i;
+
+    for (i = 0; i < steps; i++) {
+      pos += step_size;
+      if ((*tiles_)[pixel_to_tile(pos)]) {
+        BN_LOG("COLLIDED!");
+        return pos - step_size;
+      }
+    }
+    return dst;
+}
 private:
   bool isDash = true;
   bool touchedGround = false;
   int dashCoolDown = 0;
   int dashTime = 0;
   bn::camera_ptr camera_;
-  const bn::span<bool>* tiles_;
+  const bn::span<const bntmx::map_tile>* tiles_;
   const int rows;
   const int cols;
-  bn::fixed_point attemptToEnter(bn::fixed_point src, bn::fixed_point dst) {
-    // Calculate the direction of movement
-    bn::fixed dx = dst.x() - src.x();
-    bn::fixed dy = dst.y() - src.y();
-
-    // Calculate the number of steps along the x and y axis
-    int steps = bn::max(ABS(dx.integer()), ABS(dx.integer()));  // Max steps in x or y direction
-
-    // Calculate the step size in each direction
-    bn::fixed x_step = dx / steps;
-    bn::fixed y_step = dy / steps;
-
-    // Start from the src position
-    bn::fixed_point current_pos = src;
-
-    // Iterate over each step and check for collisions
-    for (int i = 0; i <= steps; ++i) {
-        int tile_x = current_pos.x().integer() / TILE_SIZE;
-        int tile_y = current_pos.y().integer() / TILE_SIZE;
-
-        // Check if the current tile is collidable
-        if (tile_x >= 0 && tile_y >= 0 && tile_x < rows && tile_y < cols && (*tiles_)[tile_y * cols + tile_x]) {
-            return current_pos;  // Return the furthest valid point
-        }
-
-        // Move to the next step
-        current_pos.set_x(current_pos.x() + x_step);
-        current_pos.set_y(current_pos.y() + y_step);
-    }
-
-    return dst;  // No collision, return the destination
-}
 };

@@ -3,6 +3,7 @@
 #include "bn_core.h"
 #include "bn_fixed_point_fwd.h"
 #include "bn_keypad.h"
+#include "bn_log.h"
 #include "bn_regular_bg_ptr.h"
 #include "bn_sprite_actions.h"
 #include "bn_sprite_animate_actions.h"
@@ -26,8 +27,6 @@
 #include "bn_sprite_text_generator.h"
 #include "bn_regular_bg_map_cell_info.h"
 #include "utils.h"
-
-
 
 #include "Player.cpp"
 
@@ -54,8 +53,6 @@ void animation() {
   // }
 }
 
-
-
 int main() {
 
   bn::core::init();
@@ -70,31 +67,31 @@ int main() {
   int rows = map->dimensions_in_tiles().height();
 
   // for (y = 0; y < cols; y++) {
-    
+
   // }
   // auto thing = bn::regular_bg_tiles_items::foreground.create_tiles();
   // bn::regular_bg_map_item map_item(
   //   tiles[0], // Map data
   //   bn::size(map->dimensions_in_tiles())
   // );
-  
+
   // bn::regular_bg_ptr::create(0, 0, map_item, bn::regular_bg_tiles_items::foreground);
   // bn::music_items::maybe.play();
 
   bn::timer counter = bn::timer();
   const float ticks_per_second = (float) bn::timers::ticks_per_second();
-  
+
   bn::sprite_ptr character_sprite = bn::sprite_items::astronaut.create_sprite(0, 0);
   character_sprite.set_bg_priority(0);
 
   bn::camera_ptr root_camera = bn::camera_ptr::create(0, 0);
-  Player character = Player(character_sprite, &bn::sprite_items::astronaut, root_camera);
+  Player character = Player(character_sprite, &bn::sprite_items::astronaut, root_camera, &tiles, rows, cols);
   // character_sprite.remove_camera();
 
   bn::regular_bg_ptr sky = bn::regular_bg_items::sky.create_bg(-56, -56);
   bn::regular_bg_ptr level = bn::regular_bg_items::testmap2.create_bg(0,0);
   sky.set_priority(3);
-  level.set_priority(2); 
+  level.set_priority(2);
   sky.set_camera(root_camera);
   level.set_camera(root_camera);
   // level.set_blending_enabled(true);

@@ -1,6 +1,7 @@
 #include "bn_assert.h"
 #include "bn_fixed_fwd.h"
 #include "bn_fixed_point_fwd.h"
+#include "bn_log.h"
 #include "bn_sprite_animate_actions.h"
 #include "bn_sprite_item.h"
 #include "bn_sprite_ptr.h"
@@ -28,6 +29,7 @@ public:
     void zeroSpritePointer() {
       sprite_ptr_.set_position(0, 0);
     }
+    virtual bn::fixed_point attemptToEnter(bn::fixed_point src, bn::fixed_point dst) { return dst; };
 
     // Mutators
     virtual void setPos(bn::fixed_point pos) {
@@ -38,6 +40,7 @@ public:
     void setVel(velocity_t vel) { vel_ = vel; };
     void setGravity(bool gravity) { gravity_ = gravity;};
     void tickPhysics(float deltaT) {
+        bn::fixed_point src = pos_;
         bn::fixed y = pos_.y().to_float() + (vel_.yvel * deltaT);
         bn::fixed x = pos_.x().to_float() + (vel_.xvel * deltaT);
         if (gravity_) {
@@ -45,7 +48,7 @@ public:
             // BN_ASSERT(false, "YOU STUPIOD", y);
             setVel({vel_.xvel, vel_.yvel + (deltaT * GRAVITY)});
         }
-        setPos({x, y});
+        setPos(attemptToEnter(src, {x, y}));
     };
     void setWorkaroundPos(bn::fixed_point pos) { pos_ = pos; sprite_ptr_.set_position(pos); };
 
