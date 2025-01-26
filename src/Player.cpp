@@ -125,7 +125,7 @@ public:
         bn::fixed dx = step_size.x();
         bn::fixed dy = step_size.y();
 
-        // HANDLE X COLLISION
+        // HANDLE Y COLLISION
         
         if ((*tiles_)[pixel_to_tile(pos - (bn::fixed_point) {dx, 0})]) {
           if (step_size.y() > 0.0f) { // Moving down
@@ -137,6 +137,8 @@ public:
 
         pos.set_y(new_y);
 
+        // HANDLE X COLLISION
+
         if ((*tiles_)[pixel_to_tile(pos)]) {
           if (step_size.x() > 0.0f) { // Moving right
             new_x = pos.x() - (pos.x() % 32)- 16; // LEFT EDGE
@@ -147,7 +149,6 @@ public:
           }
         }
         pos.set_x(new_x);
-        // HANDLE Y COLLISION 
 
 
         return pos;
