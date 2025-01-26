@@ -56,11 +56,12 @@ public:
         current_velocity.xvel = 0.0f;
       }
 
-      if (bn::keypad::a_pressed() && grounded(current_pos) && (((int) current_pos.y()) % 32) >= 15) {
+      if (bn::keypad::a_pressed() && grounded(current_pos) && (((int) current_pos.y()) % 32) >= JUMP_POSITION) {
         current_velocity.yvel = JUMP_SPEED;
         setGravity(true);
         // Do we need to do anything else here?
-      }     }
+      } 
+    }
 
 
     if (isDash) {
@@ -87,13 +88,8 @@ public:
     current_pos = getPos();
 
     setPos(current_pos);
-    /*if (isDash) { // TODO: Animations
       
-    } else {
-      if () {
-
-      }
-    }*/
+    }
   }
   void setPos(bn::fixed_point pos) override {
     setWorkaroundPos(pos);
@@ -142,9 +138,41 @@ public:
     for (i = 0; i < steps; i++) {
       pos += step_size;
       if ((*tiles_)[pixel_to_tile(pos)]) {
-        BN_LOG("COLLIDED!", (int)getVel().xvel, " ", (int) getVel().yvel, " ", pixel_to_tile(pos));
-        return pos - step_size;
+        BN_LOG("COLLIDED!", (int)getVel().xvel, " ", (int) getVel().yvel, " ", pixel_to_tile(pos)); 
+        float new_x = pos.x();
+        float new_y = pos.y();
+        float dx = step_size.x();
+        float dy = step_size.y();
+
+        // HANDLE X COLLISION
+        if ((*tiles_)[pixel_to_tile(pos - {0, dy})]) {
+          if (step_size.x() > 0.0f) { // Moving right
+            new_x = pos.x() - (pos.x() % 32)- 16; // LEFT EDGE
+            dx = new_x - pos.x();
+          } else {
+            new_x = pos.x() - (pos.x() % 32) + 31 + 16 // RIGHT EDGE
+            dx = new_x - pos.x();
+          }
+        }
+        pos.set_x(new_x);
+        // HANDLE Y COLLISION 
+        if ((*tiles_)[pixel_to_tile(pos - {dx, 0})]) {
+          if (step_size.y() > 0.0f) { // Moving down
+            new_y = pos.y() - (pos.y() % 32) + 16; // TOP EDGE  
+          } else {
+            new_y = pos.y() - (pos.y() % 32) + 31 - 16; // BOTTOM EDGE
+          }
+        }
+
+        pos.set_y(new_y);
+
+        return pos;
       }
+    }
+    if (dst.x() < -X_BORDER) {
+      dst.set_x(-X_BORDER);
+    } else if (dst.x() > X_BORDER) {
+      dst.set_x(X_BORDER);
     }
     return dst;
   }
