@@ -41,15 +41,15 @@ public:
 
     void setAnimationOrder(int type) {
       if (type == 0 ) { // IDLE
-        animation_ = bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_.tiles_item(), IDLE);
+        animation_ = bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_->tiles_item(), IDLE);
       } else if(type == 1) { // WALK
-        animation_ = bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_WALK);
+        animation_ = bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_->tiles_item(), ANIM_WALK);
       } else if (type == 2) { // JUMP
-        animation_ =  bn::create_sprite_animate_action_once(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_JUMP);
+        animation_ =  bn::create_sprite_animate_action_once(sprite_ptr_, 1, sprite_item_->tiles_item(), ANIM_JUMP);
       } else if (type == 3) { // DASH
-        animation_ =  bn::create_sprite_animate_action_once(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_DASH);
+        animation_ =  bn::create_sprite_animate_action_once(sprite_ptr_, 1, sprite_item_->tiles_item(), ANIM_DASH);
       } else if (type == 4) { // FALL
-        animation_ =  bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_FALL);
+        animation_ =  bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_->tiles_item(), ANIM_FALL);
       } 
     }
 
@@ -94,7 +94,7 @@ private:
     bn::sprite_ptr sprite_ptr_;
     bn::fixed_point pos_;
     bn::sprite_animate_action<4> animation_;
-    bn::sprite_item sprite_item_;
+    const bn::sprite_item* sprite_item_;
     velocity_t vel_;
     bool gravity_;
 };
