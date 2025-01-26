@@ -8,7 +8,6 @@
 class Player : private Entity {
 public:
   Player(bn::sprite_ptr& sprite_ptr, const bn::sprite_item *sprite_item) : Entity(sprite_ptr, sprite_item), camera_(bn::camera_ptr::create(getPos())) {
-    sprite_ptr.set_camera(camera_);
     setGravity(true);
   }
   void tick(float deltaTime) override {
@@ -64,8 +63,9 @@ public:
   }
   void setPos(bn::fixed_point pos) override {
     setWorkaroundPos(pos);
-    // camera_.set_position(pos);
-    
+    /*camera_.set_position(pos);*/
+    //zeroSpritePointer();
+    //BN_ASSERT(false, "BRUH:", camera_.x(), " ", camera_.y());
   }
 private:
   bool isDash = true;

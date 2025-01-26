@@ -25,6 +25,10 @@ public:
     velocity_t getVel() const { return vel_; };
     bool isGravity() { return gravity_; };
 
+    void zeroSpritePointer() {
+      sprite_ptr_.set_position(0, 0);
+    }
+
     // Mutators
     virtual void setPos(bn::fixed_point pos) {
       sprite_ptr_.set_position(pos);

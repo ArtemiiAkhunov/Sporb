@@ -119,12 +119,15 @@ int main() {
   bn::sprite_ptr character_sprite = bn::sprite_items::astronaut.create_sprite(0, 0);
   character_sprite.set_bg_priority(0);
 
+  bn::camera_ptr root_camera = bn::camera_ptr::create(0, 0);
   Player character = Player(character_sprite, &bn::sprite_items::astronaut);
 
   bn::regular_bg_ptr sky = bn::regular_bg_items::sky.create_bg(-56, -56);
   bn::regular_bg_ptr level = bn::regular_bg_items::testmap2.create_bg(0,0);
   sky.set_priority(3);
-  level.set_priority(2);
+  level.set_priority(2); 
+  sky.set_camera(root_camera);
+  level.set_camera(root_camera);
   // level.set_blending_enabled(true);
   float speed = -0.025;
 
