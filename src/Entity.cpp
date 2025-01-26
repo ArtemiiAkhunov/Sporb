@@ -13,7 +13,7 @@ public:
     const int start_y; // Y-coordinate
     // Constructor
     Entity(bn::sprite_ptr& sprite_ptr, const bn::sprite_item *sprite_item)
-        : sprite_ptr_(sprite_ptr), start_x(sprite_ptr.x()), start_y(sprite_ptr.y()) ,animation_(bn::create_sprite_animate_action_forever(sprite_ptr, 1, sprite_item->tiles_item(), 0, 0, 0, 0)), gravity_(true) {
+        : sprite_ptr_(sprite_ptr), start_x(sprite_ptr.x()), start_y(sprite_ptr.y()) ,animation_(bn::create_sprite_animate_action_forever(sprite_ptr, 1, sprite_item->tiles_item(), 0, 0, 0, 0)), gravity_(true), sprite_item_(sprite_item) {
         }
 
     // Accessors
@@ -37,6 +37,39 @@ public:
       sprite_ptr_.set_position(pos);
       pos_ = pos;
     }
+
+    void setAnimationOrder(int type) {
+      if (type == 0 ) { // RIGHT IDLE
+        animation_ = bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_.tiles_item(), IDLE);
+      } else if (type == 1) { // LEFT_IDLE
+        animation_ = bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_.tiles_item(), IDLE);
+      }else if(type == 2) { // RIGHT_WALK
+        animation_ = bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_WALK);
+      } else if (type == 3) { // LEFT_WALK
+        animation_ =  bn::create_sprite_animate_action_forever(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_WALK);
+        bn::sprite_horizontal_flip_toggle_action::sprite_horizontal_flip_toggle_action(sprite_ptr_, 0);
+      } else if (type == 4) { // RIGHT_JUMP
+        animation_ =  bn::create_sprite_animate_action_once(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_JUMP);
+      } else if (type == 5) {// LEFT_JUMP 
+        animation_ =  bn::create_sprite_animate_action_once(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_JUMP);
+        bn::sprite_horizontal_flip_toggle_action::sprite_horizontal_flip_toggle_action(sprite_ptr_, 0);
+      } else if (type == 6) { // RIGHT_DASH
+        animation_ =  bn::create_sprite_animate_action_once(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_DASH);
+        bn::sprite_horizontal_flip_toggle_action::sprite_horizontal_flip_toggle_action(sprite_ptr_, 0);
+      } else if(type == 7) { // LEFT_SHASH
+        animation_ =  bn::create_sprite_animate_action_once(sprite_ptr_, 1, sprite_item_.tiles_item(), ANIM_DASH);
+        bn::sprite_horizontal_flip_toggle_action::sprite_horizontal_flip_toggle_action(sprite_ptr_, 0);
+      }
+    }
+
+    void flipAnimmation() {
+      bn::sprite_horizontal_flip_toggle_action::sprite_horizontal_flip_toggle_action(sprite_ptr_, 0);
+    }
+
+    void animationUpdate() {
+      animation_.update();
+    }
+
     virtual void tick(float deltaTime) {};
     void setVel(velocity_t vel) { vel_ = vel; };
     void setGravity(bool gravity) { gravity_ = gravity;};
@@ -70,6 +103,7 @@ private:
     bn::sprite_ptr sprite_ptr_;
     bn::fixed_point pos_;
     bn::sprite_animate_action<4> animation_;
+    bn::sprite_item sprite_item_;
     velocity_t vel_;
     bool gravity_;
 };

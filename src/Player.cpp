@@ -69,7 +69,10 @@ public:
         dashTime --;
         current_velocity.xvel = DASH_SPEED;
         if (facingLeft) {
+          setAnimationOrder(7);
           current_velocity.xvel = -DASH_SPEED;
+        } else {
+          setAnimationOrder(6);
         }
         current_velocity.yvel = 0.0f;
       } else {
@@ -87,7 +90,8 @@ public:
 
     current_pos = getPos();
 
-    setPos(current_pos);  
+    setPos(current_pos);
+    
   }
 
   void setPos(bn::fixed_point pos) override {
@@ -174,7 +178,7 @@ private:
   int dashCoolDown = 0;
   int dashTime = 0;
   bool facingLeft = false;
-  bn::camera_ptr camera_;
+t bn::camera_ptr camera_;
   const bn::span<const bntmx::map_tile>* tiles_;
   const int rows;
   const int cols;
