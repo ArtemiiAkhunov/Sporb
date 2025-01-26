@@ -16,6 +16,7 @@
 #include "bn_regular_bg_ptr.h"
 #include "bn_regular_bg_item.h"
 #include "bn_regular_bg_map_ptr.h"
+#include "bn_regular_bg_items_cover.h"
 #include "bn_sprite_text_generator.h"
 
 #include "Player.cpp"
@@ -48,7 +49,15 @@ int main() {
   bn::core::init();
   bn::bg_palettes::set_transparent_color(bn::color(2, 2, 5));
 
-  bn::music_items::mainmelody.play();
+  bn::music_items::mainmelody.play(0.5);
+  bn::regular_bg_ptr cover = bn::regular_bg_items::cover.create_bg(0,0);
+  cover.set_priority(0);
+  while (!bn::keypad::any_pressed()) {
+    bn::core::update();
+  }
+  cover.set_visible(false);
+  
+
   bntmx::map* map = new bntmx::maps::testmap2();
   auto tiles= map->tiles(0);
   // int y;
