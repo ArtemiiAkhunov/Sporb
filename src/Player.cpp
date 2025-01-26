@@ -81,7 +81,7 @@ public:
   }
 
   static inline int pixel_to_tile(bn::fixed_point pos) {
-    return (((pos.y().integer()) + 256) / 32) * 16 + (((pos.x().integer()) + 256) / 32);
+    return (((pos.y().integer()) + 272) / 32) * 16 + (((pos.x().integer()) + 256) / 32);
   }
 
   bn::fixed_point attemptToEnter(bn::fixed_point src, bn::fixed_point dst) override {
@@ -123,7 +123,7 @@ public:
     return dst;
   }
   bool grounded(bn::fixed_point pos) override {
-    return ((*tiles_)[pixel_to_tile(pos + (bn::fixed_point) {0, 1})]);
+    return ((*tiles_)[pixel_to_tile(pos + (bn::fixed_point) {0, 16})]);
   }
 
 private:
