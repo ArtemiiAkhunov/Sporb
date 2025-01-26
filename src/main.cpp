@@ -31,34 +31,12 @@
 
 #include "Player.cpp"
 
-void sprites_bg_move_scene() {
-  bn::regular_bg_ptr sky = bn::regular_bg_items::sky.create_bg(-56, -56);
-  bn::regular_bg_ptr level = bn::regular_bg_items::testmap2.create_bg(0,0);
-  sky.set_priority(0);
-  level.set_priority(1);
-  // level.set_blending_enabled(true);
-  float speed = 0.05;
-
-  while(! bn::keypad::start_pressed()) {
-    if (bn::keypad::left_held()) {
-      sky.set_x(sky.x() - speed);
-    } else if (bn::keypad::right_held()) {
-      sky.set_x(sky.x() + speed);
-    } else if (bn::keypad::up_held()) {
-      sky.set_y(sky.y() + speed);
-    } else if (bn::keypad::down_held()) {
-      sky.set_y(sky.y() - speed);
-    }
-    bn::core::update();
-  }
-}
-
 void animation() {
   bn::sprite_ptr astronaut_sprite = bn::sprite_items::astronaut.create_sprite(0, 0);
 
   bn::sprite_animate_action<4> action = bn::create_sprite_animate_action_forever(astronaut_sprite, 16, bn::sprite_items::astronaut.tiles_item(), 1, 0, 1, 2);
 
-  while (!bn::keypad::start_pressed()) {
+  // while (!bn::keypad::start_pressed()) {
     if (bn::keypad::left_pressed()) {
       action = bn::create_sprite_animate_action_forever(astronaut_sprite, 16, bn::sprite_items::astronaut.tiles_item(), 1, 0, 1, 2);
     } else if (bn::keypad::right_pressed()) {
@@ -72,8 +50,8 @@ void animation() {
     }
 
     action.update();
-    bn::core::update();
-  }
+    // bn::core::update();
+  // }
 }
 
 bn::fixed_point attemptToEnter(bn::span<bool>* tiles, bn::fixed_point src, bn::fixed_point dst, int cols, int rows) {
@@ -138,16 +116,35 @@ int main() {
   const float ticks_per_second = (float) bn::timers::ticks_per_second();
   
   bn::sprite_ptr character_sprite = bn::sprite_items::astronaut.create_sprite(0, 0);
+  character_sprite.set_bg_priority(0);
 
   Player character = Player(character_sprite, &bn::sprite_items::astronaut);
+
+  bn::regular_bg_ptr sky = bn::regular_bg_items::sky.create_bg(-56, -56);
+  bn::regular_bg_ptr level = bn::regular_bg_items::testmap2.create_bg(0,0);
+  sky.set_priority(3);
+  level.set_priority(2);
+  // level.set_blending_enabled(true);
+  float speed = 0.05;
 
   while (true) {
     float deltaT = counter.elapsed_ticks_with_restart() / ticks_per_second;
 
+    // DISPLAY_SKY
+    if (bn::keypad::left_held()) {
+      sky.set_x(sky.x() - speed);
+    } else if (bn::keypad::right_held()) {
+      sky.set_x(sky.x() + speed);
+    } else if (bn::keypad::up_held()) {
+      sky.set_y(sky.y() + speed);
+    } else if (bn::keypad::down_held()) {
+      sky.set_y(sky.y() - speed);
+    }
+    // END DISPLAY_SKY
+
     character.tick(deltaT);
     // animation();
 
-    sprites_bg_move_scene();
     bn::core::update();
   }
 }
